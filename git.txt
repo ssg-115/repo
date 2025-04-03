@@ -1,1 +1,26 @@
-git
+{
+  "bool": {
+    "must": [
+      {
+        "range": {
+          "@timestamp": {
+            "gte": "now-7d/d+9h",
+            "lte": "now/d+22h",
+            "format": "strict_date_optional_time"
+          }
+        }
+      },
+      {
+        "terms": {
+          "day_of_week": [1, 2, 3, 4, 5]
+        }
+      },
+      {
+        "term": {
+          "monitor.type": "synthetics"
+        }
+      }
+    ]
+  }
+}
+
