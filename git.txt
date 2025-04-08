@@ -1,24 +1,6 @@
-{
-        "script": {
-          "script": {
-            "source": "params.days.contains(doc['@timestamp'].value.dayOfWeek)",
-            "params": {
-              "days": [1, 2, 3, 4, 5]
-            }
-          }
-        }
-      }
-
-
-GET your_index_name/_search
-{
-  "size": 5,
-  "_source": ["@timestamp"],
-  "script_fields": {
-    "day_of_week": {
-      "script": {
-        "source": "doc['@timestamp'].value.dayOfWeek"
-      }
-    }
-  }
-}
+"source": """
+  def est = doc['@timestamp'].value.withZoneSameInstant(ZoneId.of('America/New_York'));
+  int hour = est.getHour();
+  int day = est.getDayOfWeek().getValue(); // Monday = 1, Sunday = 7
+  return hour >= 9 && hour < 18 && day >= 1 && day <= 5;
+"""
