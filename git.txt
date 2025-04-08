@@ -1,6 +1,12 @@
-"source": """
+if (doc.containsKey('@timestamp') && !doc['@timestamp'].empty) {
   def est = doc['@timestamp'].value.withZoneSameInstant(ZoneId.of('America/New_York'));
   int hour = est.getHour();
-  int day = est.getDayOfWeek().getValue(); // Monday = 1, Sunday = 7
-  return hour >= 9 && hour < 18 && day >= 1 && day <= 5;
-"""
+  int day = est.getDayOfWeek().getValue(); // 1 = Monday, 7 = Sunday
+  emit(hour >= 9 && hour < 18 && day >= 1 && day <= 5);
+} else {
+  emit(false);
+}
+
+
+def est = doc['@timestamp'].value.withZoneSameInstant(ZoneId.of('America/New_York'));
+emit(est.toString());
